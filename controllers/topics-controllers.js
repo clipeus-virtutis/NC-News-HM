@@ -3,7 +3,7 @@ const { fetchTopics } = require("../models/topics-models");
 exports.getTopics = (req, res, next) => {
   fetchTopics()
     .then((topics) => {
-      res.status(200).send(topics);
+      res.status(200).send({ topics });
     })
     .catch((err) => {
       console.log(err, "err from topics controller line 11");

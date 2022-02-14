@@ -23,7 +23,7 @@ describe("NC News Server", () => {
         return request(app)
           .get("/api/topics")
           .then((response) => {
-            expect(Array.isArray(response.body)).toBe(true);
+            expect(Array.isArray(response.body.topics)).toBe(true);
           });
       });
       test("status(200), responds with an array of topics", () => {
@@ -31,8 +31,8 @@ describe("NC News Server", () => {
           .get("/api/topics")
           .expect(200)
           .then((response) => {
-            expect(response.body).toHaveLength(3);
-            response.body.forEach((topic) => {
+            expect(response.body.topics).toHaveLength(3);
+            response.body.topics.forEach((topic) => {
               expect(topic).toEqual(
                 expect.objectContaining({
                   description: expect.any(String),
