@@ -8,6 +8,10 @@ exports.fetchTopics = () => {
 
 exports.fetchArticle = (articleId) => {
   return db.query("SELECT * FROM articles WHERE article_id = $1;", [articleId]).then((results) => {
-    return results.rows[0];
+    if (results.rows.length < 1) {
+      return Promise.reject({ status: 400, msg: "Bad Request" });
+    } else {
+      return results.rows[0];
+    }
   });
 };

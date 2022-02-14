@@ -3,6 +3,7 @@ const app = require("../app");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data");
+const { response } = require("../app");
 
 beforeEach(() => seed(testData));
 
@@ -51,7 +52,6 @@ describe("NC News Server", () => {
           .get("/api/articles/3")
           .expect(200)
           .then((response) => {
-            console.log(response.body.article, "TEST");
             expect(response.body.article).toEqual(
               expect.objectContaining({
                 author: "icellusedkars",
@@ -65,9 +65,14 @@ describe("NC News Server", () => {
             );
           });
       });
-      //   test('status(400), responds with a bad request message when article_id doesn\'t exist', () => {
-      //       return request(app)
-      //   });
+      test("status(400), responds with a bad request message when article_id doesn't exist", () => {
+        return request(app)
+          .get("/api/articles/100")
+          .expect(400)
+          .then((response) => {
+            expect(response.body.msg).toBe("Bad Request");
+          });
+      });
     });
   });
 });
