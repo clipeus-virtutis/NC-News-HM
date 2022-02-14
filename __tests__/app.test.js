@@ -3,7 +3,6 @@ const app = require("../app");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data");
-const { response } = require("../app");
 
 beforeEach(() => seed(testData));
 
@@ -18,24 +17,31 @@ describe("NC News Server", () => {
         expect(response.body.msg).toBe("Path not found");
       });
   });
-  //   describe("/api/topics", () => {
-  //     describe("GET", () => {
-  //       test("status(200), responds with an array of topics", () => {
-  //         return request(app)
-  //           .get("/api/topics")
-  //           .expect(200)
-  //           .then((response) => {
-  //             expect(response.body.topics).toHaveLength(3);
-  //             response.body.topics.forEach((topic) => {
-  //               expect(topic).toEqual(
-  //                 expect.objectContaining({
-  //                   description: expect.any(String),
-  //                   slug: expect.any(String),
-  //                 })
-  //               );
-  //             });
-  //           });
-  //       });
-  //     });
-  //   });
+  describe("/api/topics", () => {
+    describe("GET", () => {
+      test("returns an array", () => {
+        return request(app)
+          .get("/api/topics")
+          .then((response) => {
+            expect(Array.isArray(response.body)).toBe(true);
+          });
+      });
+      test("status(200), responds with an array of topics", () => {
+        return request(app)
+          .get("/api/topics")
+          .expect(200)
+          .then((response) => {
+            expect(response.body).toHaveLength(3);
+            response.body.forEach((topic) => {
+              expect(topic).toEqual(
+                expect.objectContaining({
+                  description: expect.any(String),
+                  slug: expect.any(String),
+                })
+              );
+            });
+          });
+      });
+    });
+  });
 });
