@@ -68,9 +68,9 @@ describe("NC News Server", () => {
       test("status(400), responds with a bad request message when article_id doesn't exist", () => {
         return request(app)
           .get("/api/articles/100")
-          .expect(400)
+          .expect(404)
           .then((response) => {
-            expect(response.body.msg).toBe("Bad Request");
+            expect(response.body.msg).toBe("Not Found");
           });
       });
     });
