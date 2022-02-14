@@ -44,4 +44,30 @@ describe("NC News Server", () => {
       });
     });
   });
+  describe("/api/articles", () => {
+    describe("GET /:article_id", () => {
+      test('"status(200), responds with an object with the correct properties"', () => {
+        return request(app)
+          .get("/api/articles/3")
+          .expect(200)
+          .then((response) => {
+            console.log(response.body.article, "TEST");
+            expect(response.body.article).toEqual(
+              expect.objectContaining({
+                author: "icellusedkars",
+                title: "Eight pug gifs that remind me of mitch",
+                article_id: 3,
+                body: "some gifs",
+                topic: "mitch",
+                created_at: "2020-11-03T09:12:00.000Z",
+                votes: 0,
+              })
+            );
+          });
+      });
+      //   test('status(400), responds with a bad request message when article_id doesn\'t exist', () => {
+      //       return request(app)
+      //   });
+    });
+  });
 });
