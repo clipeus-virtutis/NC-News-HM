@@ -65,7 +65,7 @@ describe("NC News Server", () => {
             );
           });
       });
-      test("status(400), responds with a bad request message when article_id doesn't exist", () => {
+      test("status(404), responds with a 'Not Found' message when article_id doesn't exist", () => {
         return request(app)
           .get("/api/articles/100")
           .expect(404)
@@ -94,6 +94,18 @@ describe("NC News Server", () => {
                 votes: 10,
               })
             );
+          });
+      });
+      test.only("status(404), responds with a 'ID Not Found' message when article_id doesn't exist", () => {
+        const articleUpdates = {
+          inc_votes: 10,
+        };
+        return request(app)
+          .patch("/api/articles/100")
+          .send(articleUpdates)
+          .expect(404)
+          .then((response) => {
+            expect(response.body.msg).toBe("ID Not Found");
           });
       });
     });

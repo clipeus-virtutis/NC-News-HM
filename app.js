@@ -1,6 +1,6 @@
 const express = require("express");
 const { getArticle, patchArticle } = require("./controllers/article-controllers");
-const { handlesCustomErrors } = require("./controllers/error-controllers");
+const { handlesCustomErrors, handles500Errors } = require("./controllers/error-controllers");
 const { getTopics } = require("./controllers/topics-controllers");
 
 const app = express();
@@ -16,5 +16,6 @@ app.all("/*", (req, res) => {
 });
 
 app.use(handlesCustomErrors);
+app.use(handles500Errors);
 
 module.exports = app;
