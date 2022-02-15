@@ -74,5 +74,28 @@ describe("NC News Server", () => {
           });
       });
     });
+    describe("PATCH /:article_id", () => {
+      test("status(200), responds with the updated article after the votes property has been amended", () => {
+        const articleUpdates = {
+          inc_votes: 10,
+        };
+        return request(app)
+          .patch("/api/articles/4")
+          .send(articleUpdates)
+          .expect(200)
+          .then((response) => {
+            expect(response.body.article).toEqual(
+              expect.objectContaining({
+                title: "Student SUES Mitch!",
+                topic: "mitch",
+                author: "rogersop",
+                body: "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
+                created_at: expect.any(String),
+                votes: 10,
+              })
+            );
+          });
+      });
+    });
   });
 });
