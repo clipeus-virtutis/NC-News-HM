@@ -1,4 +1,8 @@
+const request = require("supertest");
 const { convertTimestampToDate, createRef, formatComments, checkArticleExists } = require("../db/helpers/utils");
+const app = require("../app");
+const db = require("../db/connection");
+const testData = require("../db/data/test-data");
 
 describe("convertTimestampToDate", () => {
   test("returns a new object", () => {
@@ -100,8 +104,13 @@ describe("formatComments", () => {
 });
 
 // describe("checkArticleExists", () => {
-//   test("returns a rejected promise when the article_id provided doesn't exist within the articles table", () => {
-//     checkArticleExists(15);
-//     expect(err.msg).toBe("ID 15 not found");
+//   test("returns a rejected promise when the article_id provided doesn't exist within the articles table", async () => {
+//     expect.assertions(1);
+//     await expect(checkArticleExists(15)).rejects.toEqual({
+//       err: {
+//         status: 404,
+//         msg: "ID 15 not found",
+//       },
+//     });
 //   });
 // });
