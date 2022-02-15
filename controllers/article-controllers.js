@@ -1,22 +1,22 @@
+const { checkArticleExists } = require("../db/helpers/utils");
 const { fetchArticle, updateArticle } = require("../models/article-models");
 
 exports.getArticle = (req, res, next) => {
   const { article_id } = req.params;
-  fetchArticle(article_id)
-    .then((article) => {
-      res.status(200).send({ article });
+
+  Promise.all([checkArticleExists(article_id), fetchArticle(article_id)])
+    .then((response) => {
+      res.status(200).send({ article: response[0][0] });
     })
     .catch(next);
 };
 
 exports.patchArticle = (req, res, next) => {
   const articleId = req.params;
-  //console.log(req.body, "REQ BODY");
   const articleUpdate = req.body;
-  //console.log(articleId, articleUpdate, "ARTICLE ID AND ARTICLEUPDATE");
-  updateArticle(articleId, articleUpdate)
-    .then((article) => {
-      res.status(200).send({ article });
+  Promise.all([checkArticleExists(articleId.article_id), updateArticle(articleId, articleUpdate)])
+    .then((response) => {
+      res.status(200).send({ article: response[1] });
     })
     .catch(next);
 };

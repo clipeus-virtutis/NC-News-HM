@@ -1,8 +1,4 @@
-const {
-  convertTimestampToDate,
-  createRef,
-  formatComments,
-} = require("../db/helpers/utils");
+const { convertTimestampToDate, createRef, formatComments, checkArticleExists } = require("../db/helpers/utils");
 
 describe("convertTimestampToDate", () => {
   test("returns a new object", () => {
@@ -102,3 +98,10 @@ describe("formatComments", () => {
     expect(formattedComments[0].created_at).toEqual(new Date(timestamp));
   });
 });
+
+// describe("checkArticleExists", () => {
+//   test("returns a rejected promise when the article_id provided doesn't exist within the articles table", () => {
+//     checkArticleExists(15);
+//     expect(err.msg).toBe("ID 15 not found");
+//   });
+// });

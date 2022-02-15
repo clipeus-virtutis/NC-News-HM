@@ -70,7 +70,7 @@ describe("NC News Server", () => {
           .get("/api/articles/100")
           .expect(404)
           .then((response) => {
-            expect(response.body.msg).toBe("Not Found");
+            expect(response.body.msg).toBe("ID 100 not found");
           });
       });
     });
@@ -80,18 +80,18 @@ describe("NC News Server", () => {
           inc_votes: 10,
         };
         return request(app)
-          .patch("/api/articles/4")
+          .patch("/api/articles/1")
           .send(articleUpdates)
           .expect(200)
           .then((response) => {
             expect(response.body.article).toEqual(
               expect.objectContaining({
-                title: "Student SUES Mitch!",
+                title: "Living in the shadow of a great man",
                 topic: "mitch",
-                author: "rogersop",
-                body: "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
+                author: "butter_bridge",
+                body: "I find this existence challenging",
                 created_at: expect.any(String),
-                votes: 10,
+                votes: 110,
               })
             );
           });
@@ -105,7 +105,7 @@ describe("NC News Server", () => {
           .send(articleUpdates)
           .expect(404)
           .then((response) => {
-            expect(response.body.msg).toBe("ID Not Found");
+            expect(response.body.msg).toBe("ID 100 not found");
           });
       });
       test("status(400), responds with a Bad Request error message when the request body key is incorrect", () => {
