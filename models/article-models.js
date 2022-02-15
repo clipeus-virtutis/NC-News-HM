@@ -14,7 +14,7 @@ exports.updateArticle = (articleId, votes) => {
   //console.log("MODEL");
   //console.log(articleId, votes, "MODEL ARTICLE ID AND VOTES");
   if (!votes.inc_votes) {
-    return Promise.reject({ status: 400, msg: "Bad Request" });
+    return Promise.reject({ status: 400, msg: "Bad Request - incorrect body format" });
   }
   return db.query("SELECT votes FROM articles WHERE article_id = $1;", [articleId.article_id]).then((results) => {
     //console.log(results.rows, "RESULTS ROWS ABOVE REJECTION");
