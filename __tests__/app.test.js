@@ -120,7 +120,18 @@ describe("NC News Server", () => {
             expect(response.body.msg).toBe("Bad Request - incorrect body format");
           });
       });
-      test("status(400), responds with a Bad Request error message when the request body value is the wrong type", () => {});
+      test("status(400), responds with a Bad Request error message when the request body value is the wrong type", () => {
+        const articleUpdates = {
+          inc_votes: "Incorrect Data",
+        };
+        return request(app)
+          .patch("/api/articles/4")
+          .send(articleUpdates)
+          .expect(400)
+          .then((response) => {
+            expect(response.body.msg).toBe("Bad Request - incorrect body data");
+          });
+      });
     });
   });
 });

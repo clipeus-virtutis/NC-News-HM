@@ -27,7 +27,7 @@ exports.updateArticle = (articleId, votes) => {
       return db
         .query("UPDATE articles SET votes = $1 WHERE article_id = $2 RETURNING *;", [newVotes, articleId.article_id])
         .then((results) => {
-          console.log(results.rows, "RESPONSE ROWS END");
+          //console.log(results.rows, "RESPONSE ROWS END");
           return results.rows[0];
         });
     }
