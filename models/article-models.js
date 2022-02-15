@@ -17,7 +17,7 @@ exports.updateArticle = (articleId, votes) => {
     return Promise.reject({ status: 400, msg: "Bad Request" });
   }
   return db.query("SELECT votes FROM articles WHERE article_id = $1;", [articleId.article_id]).then((results) => {
-    console.log(results.rows, "RESULTS ROWS ABOVE REJECTION");
+    //console.log(results.rows, "RESULTS ROWS ABOVE REJECTION");
     if (results.rows.length === 0) {
       return Promise.reject({ status: 404, msg: "ID Not Found" });
     } else {
