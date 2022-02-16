@@ -1,5 +1,13 @@
 const { checkArticleExists } = require("../db/helpers/utils");
-const { fetchArticle, updateArticle } = require("../models/article-models");
+const { fetchArticle, updateArticle, fetchArticles } = require("../models/article-models");
+
+exports.getArticles = (req, res, next) => {
+  fetchArticles()
+    .then((articles) => {
+      res.status(200).send({ articles });
+    })
+    .catch(next);
+};
 
 exports.getArticle = (req, res, next) => {
   const { article_id } = req.params;

@@ -1,6 +1,14 @@
 const db = require("../db/connection");
 const { checkArticleExists } = require("../db/helpers/utils");
 
+exports.fetchArticles = () => {
+  return db
+    .query("SELECT author, title, article_id, topic, created_at, votes FROM articles ORDER BY created_at desc;")
+    .then((results) => {
+      return results.rows;
+    });
+};
+
 exports.fetchArticle = (articleId) => {
   return checkArticleExists(articleId).then((results) => {
     return results[0];

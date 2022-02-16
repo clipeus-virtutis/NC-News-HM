@@ -74,6 +74,43 @@ describe("NC News Server", () => {
           });
       });
     });
+    describe("GET", () => {
+      test("returns an array", () => {
+        return request(app)
+          .get("/api/articles")
+          .then((response) => {
+            expect(Array.isArray(response.body.articles)).toBe(true);
+          });
+      });
+      test("status(200), responds with an array of article objects", () => {
+        return request(app)
+          .get("/api/articles")
+          .expect(200)
+          .then((response) => {
+            expect(response.body.articles).toHaveLength(12);
+            response.body.articles.forEach((article) => {
+              expect(article).toEqual(
+                expect.objectContaining({
+                  author: expect.any(String),
+                  title: expect.any(String),
+                  article_id: expect.any(Number),
+                  topic: expect.any(String),
+                  created_at: expect.any(String),
+                  votes: expect.any(Number),
+                })
+              );
+            });
+          });
+      });
+      test("articles should be sorted by date in descending order", () => {
+        return request(app)
+          .get("/api/articles")
+          .expect(200)
+          .then((response) => {
+            expect(response.body.articles).toBeSortedBy("created_at", { descending: true });
+          });
+      });
+    });
     describe("PATCH /:article_id", () => {
       test("status(200), responds with the updated article after the votes property has been amended", () => {
         const articleUpdates = {
