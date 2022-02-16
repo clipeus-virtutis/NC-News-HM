@@ -134,13 +134,12 @@ describe("NC News Server", () => {
       });
     });
   });
-  describe.only("/api/users", () => {
+  describe("/api/users", () => {
     describe("GET", () => {
       test("returns an array", () => {
         return request(app)
           .get("/api/users")
           .then((result) => {
-            console.log(result.body.users, "RESULT ROWS TEST");
             expect(Array.isArray(result.body.users)).toBe(true);
           });
       });
