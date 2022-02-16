@@ -134,4 +134,31 @@ describe("NC News Server", () => {
       });
     });
   });
+  describe.only("/api/users", () => {
+    describe("GET", () => {
+      test("returns an array", () => {
+        return request(app)
+          .get("/api/users")
+          .then((result) => {
+            console.log(result.body.users, "RESULT ROWS TEST");
+            expect(Array.isArray(result.body.users)).toBe(true);
+          });
+      });
+      test("status(200), responds with an array of user objects", () => {
+        return request(app)
+          .get("/api/users")
+          .expect(200)
+          .then((result) => {
+            expect(result.body.users).toHaveLength(4);
+            result.body.users.forEach((user) => {
+              expect(user).toEqual(
+                expect.objectContaining({
+                  username: expect.any(String),
+                })
+              );
+            });
+          });
+      });
+    });
+  });
 });
