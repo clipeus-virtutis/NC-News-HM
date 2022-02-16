@@ -102,15 +102,3 @@ describe("formatComments", () => {
     expect(formattedComments[0].created_at).toEqual(new Date(timestamp));
   });
 });
-
-// describe("checkArticleExists", () => {
-//   test("returns a rejected promise when the article_id provided doesn't exist within the articles table", async () => {
-//     expect.assertions(1);
-//     await expect(checkArticleExists(15)).rejects.toEqual({
-//       err: {
-//         status: 404,
-//         msg: "ID 15 not found",
-//       },
-//     });
-//   });
-// });
