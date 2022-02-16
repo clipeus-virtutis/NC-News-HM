@@ -65,12 +65,71 @@ describe("NC News Server", () => {
             );
           });
       });
-      test("status(400), responds with a bad request message when article_id doesn't exist", () => {
+      test("status(404), responds with a 'Not Found' message when article_id doesn't exist", () => {
         return request(app)
           .get("/api/articles/100")
           .expect(404)
           .then((response) => {
-            expect(response.body.msg).toBe("Not Found");
+            expect(response.body.msg).toBe("ID 100 not found");
+          });
+      });
+    });
+    describe("PATCH /:article_id", () => {
+      test("status(200), responds with the updated article after the votes property has been amended", () => {
+        const articleUpdates = {
+          inc_votes: 10,
+        };
+        return request(app)
+          .patch("/api/articles/1")
+          .send(articleUpdates)
+          .expect(200)
+          .then((response) => {
+            expect(response.body.article).toEqual(
+              expect.objectContaining({
+                title: "Living in the shadow of a great man",
+                topic: "mitch",
+                author: "butter_bridge",
+                body: "I find this existence challenging",
+                created_at: expect.any(String),
+                votes: 110,
+              })
+            );
+          });
+      });
+      test("status(404), responds with a 'ID Not Found' message when article_id doesn't exist", () => {
+        const articleUpdates = {
+          inc_votes: 10,
+        };
+        return request(app)
+          .patch("/api/articles/100")
+          .send(articleUpdates)
+          .expect(404)
+          .then((response) => {
+            expect(response.body.msg).toBe("ID 100 not found");
+          });
+      });
+      test("status(400), responds with a Bad Request error message when the request body key is incorrect", () => {
+        const articleUpdates = {
+          incorrect_key: 10,
+        };
+        return request(app)
+          .patch("/api/articles/4")
+          .send(articleUpdates)
+          .expect(400)
+          .then((response) => {
+            expect(response.body.msg).toBe("Bad Request - incorrect body format");
+          });
+      });
+      test("status(400), responds with a Bad Request error message when the request body value is the wrong type", () => {
+        const articleUpdates = {
+          inc_votes: "Incorrect Data",
+        };
+        return request(app)
+          .patch("/api/articles/4")
+          .send(articleUpdates)
+          .expect(400)
+          .then((response) => {
+            expect(response.body.msg).toBe("Bad Request - incorrect body data");
           });
       });
     });
