@@ -12,10 +12,10 @@ exports.getArticles = (req, res, next) => {
 exports.getArticle = (req, res, next) => {
   const { article_id } = req.params;
 
-  Promise.all([checkArticleExists(article_id), fetchArticle(article_id), fetchCommentNumber(article_id)])
+  Promise.all([fetchArticle(article_id), fetchCommentNumber(article_id)])
     .then((response) => {
-      response[1].comment_count = response[2].rows[0].comment_count;
-      res.status(200).send({ article: response[1] });
+      response[0].comment_count = response[1].rows[0].comment_count;
+      res.status(200).send({ article: response[0] });
     })
     .catch(next);
 };
