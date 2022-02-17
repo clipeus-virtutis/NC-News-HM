@@ -1,5 +1,5 @@
 const { checkArticleExists } = require("../db/helpers/utils");
-const { fetchArticle, updateArticle, fetchArticles } = require("../models/article-models");
+const { fetchArticle, updateArticle, fetchArticles, fetchCommentNumber } = require("../models/article-models");
 
 exports.getArticles = (req, res, next) => {
   fetchArticles()
@@ -12,9 +12,10 @@ exports.getArticles = (req, res, next) => {
 exports.getArticle = (req, res, next) => {
   const { article_id } = req.params;
 
-  Promise.all([checkArticleExists(article_id), fetchArticle(article_id)])
+  Promise.all([fetchArticle(article_id), fetchCommentNumber(article_id)])
     .then((response) => {
-      res.status(200).send({ article: response[0][0] });
+      response[0].comment_count = response[1].rows[0].comment_count;
+      res.status(200).send({ article: response[0] });
     })
     .catch(next);
 };

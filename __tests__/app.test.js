@@ -65,6 +65,30 @@ describe("NC News Server", () => {
             );
           });
       });
+      test("status(200), responds with an object which also contains the comment count", () => {
+        return request(app)
+          .get("/api/articles/3")
+          .expect(200)
+          .then((response) => {
+            expect(response.body.article).toEqual(
+              expect.objectContaining({
+                comment_count: "2",
+              })
+            );
+          });
+      });
+      test("status(200), responds with correct comment count if there are no comments", () => {
+        return request(app)
+          .get("/api/articles/2")
+          .expect(200)
+          .then((response) => {
+            expect(response.body.article).toEqual(
+              expect.objectContaining({
+                comment_count: "0",
+              })
+            );
+          });
+      });
       test("status(404), responds with a 'Not Found' message when article_id doesn't exist", () => {
         return request(app)
           .get("/api/articles/100")
