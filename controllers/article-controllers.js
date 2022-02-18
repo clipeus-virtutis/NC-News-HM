@@ -53,9 +53,10 @@ exports.postComment = (req, res, next) => {
   // console.log(article_id, "arty ID");
   // console.log(req.body, "BODY");
 
-  Promise.all([checkArticleExists(article_id), addComment(article_id, req.body)])
+  // Promise.all([checkArticleExists(article_id), addComment(article_id, req.body)])
+  addComment(article_id, req.body)
     .then((response) => {
-      res.status(201).send({ comment: response[1] });
+      res.status(201).send({ comment: response });
     })
     .catch(next);
 };

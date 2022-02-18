@@ -204,12 +204,12 @@ describe("NC News Server", () => {
             expect(response.body.msg).toBe("Bad Request - invalid input");
           });
       });
-      test("staus(404), responds with a 'Not Found' message when article_id doesn't exist", () => {
+      test("staus(400), Bad Request message when article_id doesn't exist", () => {
         return request(app)
           .post("/api/articles/100/comments")
-          .expect(404)
+          .expect(400)
           .then((response) => {
-            expect(response.body.msg).toBe("ID 100 not found");
+            expect(response.body.msg).toBe("Bad Request - invalid input");
           });
       });
     });
