@@ -98,6 +98,50 @@ describe("NC News Server", () => {
           });
       });
     });
+    describe("GET /:article_id/comments", () => {
+      test("returns an array", () => {
+        return request(app)
+          .get("/api/articles/9/comments")
+          .then((response) => {
+            expect(Array.isArray(response.body.comments)).toBe(true);
+          });
+      });
+      test("status(200), responds with an array of comment objects", () => {
+        return request(app)
+          .get("/api/articles/9/comments")
+          .expect(200)
+          .then((response) => {
+            expect(response.body.comments).toHaveLength(2);
+            response.body.comments.forEach((comment) => {
+              expect(comment).toEqual(
+                expect.objectContaining({
+                  comment_id: expect.any(Number),
+                  votes: expect.any(Number),
+                  created_at: expect.any(String),
+                  author: expect.any(String),
+                  body: expect.any(String),
+                })
+              );
+            });
+          });
+      });
+      test("status(200), responds with an empty array when there are no comments for the particular article", () => {
+        return request(app)
+          .get("/api/articles/2/comments")
+          .expect(200)
+          .then((response) => {
+            expect(response.body.comments).toEqual([]);
+          });
+      });
+      test("staus(404), responds with a 'Not Found' message when article_id doesn't exist", () => {
+        return request(app)
+          .get("/api/articles/100/comments")
+          .expect(404)
+          .then((response) => {
+            expect(response.body.msg).toBe("ID 100 not found");
+          });
+      });
+    });
     describe("GET", () => {
       test("returns an array", () => {
         return request(app)

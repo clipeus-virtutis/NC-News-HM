@@ -1,5 +1,11 @@
-const { checkArticleExists } = require("../db/helpers/utils");
-const { fetchArticle, updateArticle, fetchArticles, fetchCommentNumber } = require("../models/article-models");
+const { checkArticleExists, checkCommentsExist } = require("../db/helpers/utils");
+const {
+  fetchArticle,
+  updateArticle,
+  fetchArticles,
+  fetchCommentNumber,
+  fetchComments,
+} = require("../models/article-models");
 
 exports.getArticles = (req, res, next) => {
   fetchArticles()
@@ -26,6 +32,16 @@ exports.patchArticle = (req, res, next) => {
   Promise.all([checkArticleExists(articleId.article_id), updateArticle(articleId, articleUpdate)])
     .then((response) => {
       res.status(200).send({ article: response[1] });
+    })
+    .catch(next);
+};
+
+exports.getComments = (req, res, next) => {
+  const { article_id } = req.params;
+
+  Promise.all([checkArticleExists(article_id), fetchComments(article_id)])
+    .then((response) => {
+      res.status(200).send({ comments: response[1].rows });
     })
     .catch(next);
 };

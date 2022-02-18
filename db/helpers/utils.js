@@ -35,3 +35,23 @@ exports.checkArticleExists = (id, next) => {
     })
     .catch(next);
 };
+
+exports.checkCommentsExist = (articleId, next) => {
+  return db
+    .query(
+      `
+            SELECT comment_id, comments.votes, comments.created_at, comments.author, comments.body FROM comments
+            LEFT JOIN articles ON articles.article_id = comments.article_id
+            WHERE comments.article_id = $1;
+            `,
+      [articleId]
+    )
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({ status: 404, msg: `No comments found` });
+      } else {
+        return rows;
+      }
+    })
+    .catch(next);
+};
