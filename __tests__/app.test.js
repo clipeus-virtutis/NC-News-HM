@@ -47,7 +47,7 @@ describe("NC News Server", () => {
   });
   describe("/api/articles", () => {
     describe("GET /:article_id", () => {
-      test('"status(200), responds with an object with the correct properties"', () => {
+      test("status(200), responds with an object with the correct properties", () => {
         return request(app)
           .get("/api/articles/3")
           .expect(200)
@@ -139,6 +139,77 @@ describe("NC News Server", () => {
           .expect(404)
           .then((response) => {
             expect(response.body.msg).toBe("ID 100 not found");
+          });
+      });
+    });
+    describe("POST /:article_id/comments", () => {
+      test("status(201), responds with the new comment", () => {
+        const newComment = {
+          username: "rogersop",
+          body: "not a bad article",
+        };
+        return request(app)
+          .post("/api/articles/2/comments")
+          .send(newComment)
+          .expect(201)
+          .then((response) => {
+            expect(response.body.comment).toEqual(
+              expect.objectContaining({
+                comment_id: expect.any(Number),
+                body: "not a bad article",
+                votes: expect.any(Number),
+                author: "rogersop",
+                article_id: 2,
+                created_at: expect.any(String),
+              })
+            );
+          });
+      });
+      test("status(400), Bad Request message when a username doesn't exist", () => {
+        const newComment = {
+          username: "Steve",
+          body: "Bad Request - Incorrect data type",
+        };
+        return request(app)
+          .post("/api/articles/2/comments")
+          .send(newComment)
+          .expect(400)
+          .then((response) => {
+            expect(response.body.msg).toBe("Bad Request - username doesn't exist");
+          });
+      });
+      test("status(400), Bad Request message when required properties aren't provided", () => {
+        const newComment = {
+          incorrectName: "rogersop",
+          body: "great article i r8 8/8",
+        };
+        return request(app)
+          .post("/api/articles/2/comments")
+          .send(newComment)
+          .expect(400)
+          .then((response) => {
+            expect(response.body.msg).toBe("Bad Request - invalid input");
+          });
+      });
+      test("status(400), Bad Request message when properties are the wrong data type", () => {
+        const newComment = {
+          incorrectName: "rogersop",
+          body: 55,
+        };
+        return request(app)
+          .post("/api/articles/2/comments")
+          .send(newComment)
+          .expect(400)
+          .then((response) => {
+            expect(response.body.msg).toBe("Bad Request - invalid input");
+          });
+      });
+      test("staus(400), Bad Request message when article_id doesn't exist", () => {
+        return request(app)
+          .post("/api/articles/100/comments")
+          .expect(400)
+          .then((response) => {
+            expect(response.body.msg).toBe("Bad Request - invalid input");
           });
       });
     });

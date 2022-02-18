@@ -1,5 +1,5 @@
 const db = require("../db/connection");
-const { checkArticleExists } = require("../db/helpers/utils");
+const { checkArticleExists, convertTimestampToDate } = require("../db/helpers/utils");
 
 exports.fetchArticles = () => {
   return db
@@ -37,6 +37,21 @@ exports.fetchComments = (articleId) => {
         `,
     [articleId]
   );
+};
+
+exports.addComment = (articleId, newComment) => {
+  const { username, body } = newComment;
+  const intArticleId = parseInt(articleId);
+  return db
+    .query(
+      `
+    INSERT INTO comments (body, author, article_id)
+    VALUES ($1, $2, $3) RETURNING *;`,
+      [body, username, intArticleId]
+    )
+    .then(({ rows }) => {
+      return rows[0];
+    });
 };
 
 exports.updateArticle = (articleId, votes) => {
