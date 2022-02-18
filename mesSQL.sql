@@ -35,6 +35,10 @@
 
 --returns a table with two columns, article_id as selected, and comment_count
 
-SELECT comment_id, comments.votes, comments.created_at, comments.author, comments.body FROM comments
-        LEFT JOIN articles ON articles.article_id = comments.article_id
-        WHERE comments.article_id = 9;
+-- SELECT comment_id, comments.votes, comments.created_at, comments.author, comments.body FROM comments
+--         LEFT JOIN articles ON articles.article_id = comments.article_id
+--         WHERE comments.article_id = 9;
+
+-- SELECT articles.*, CAST(COUNT(comments.article_id) as INT) AS comment_count FROM comments LEFT JOIN articles ON articles.article_id = comments.article_id GROUP BY articles.article_id ORDER BY created_at DESC;
+
+SELECT articles.*, CAST(COUNT(comments.article_id) as INT) AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id GROUP BY articles.article_id ORDER BY created_at DESC;
