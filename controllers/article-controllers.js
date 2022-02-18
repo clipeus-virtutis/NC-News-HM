@@ -5,6 +5,7 @@ const {
   fetchArticles,
   fetchCommentNumber,
   fetchComments,
+  addComment,
 } = require("../models/article-models");
 
 exports.getArticles = (req, res, next) => {
@@ -43,6 +44,18 @@ exports.getComments = (req, res, next) => {
   Promise.all([checkArticleExists(article_id), fetchComments(article_id)])
     .then((response) => {
       res.status(200).send({ comments: response[1].rows });
+    })
+    .catch(next);
+};
+
+exports.postComment = (req, res, next) => {
+  const { article_id } = req.params;
+  // console.log(article_id, "arty ID");
+  // console.log(req.body, "BODY");
+
+  Promise.all([checkArticleExists(article_id), addComment(article_id, req.body)])
+    .then((response) => {
+      res.status(201).send({ comment: response[1] });
     })
     .catch(next);
 };
