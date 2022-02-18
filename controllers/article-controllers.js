@@ -29,9 +29,10 @@ exports.getArticle = (req, res, next) => {
 exports.patchArticle = (req, res, next) => {
   const articleId = req.params;
   const articleUpdate = req.body;
-  Promise.all([checkArticleExists(articleId.article_id), updateArticle(articleId, articleUpdate)])
+
+  updateArticle(articleId, articleUpdate)
     .then((response) => {
-      res.status(200).send({ article: response[1] });
+      res.status(200).send({ article: response });
     })
     .catch(next);
 };
