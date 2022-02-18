@@ -170,6 +170,21 @@ describe("NC News Server", () => {
             });
           });
       });
+      test("status(200), article object now also includes comment_count", () => {
+        return request(app)
+          .get("/api/articles")
+          .expect(200)
+          .then((response) => {
+            expect(response.body.articles).toHaveLength(12);
+            response.body.articles.forEach((article) => {
+              expect(article).toEqual(
+                expect.objectContaining({
+                  comment_count: expect.any(Number),
+                })
+              );
+            });
+          });
+      });
       test("articles should be sorted by date in descending order", () => {
         return request(app)
           .get("/api/articles")
