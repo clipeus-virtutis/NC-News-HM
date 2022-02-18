@@ -39,9 +39,9 @@ exports.patchArticle = (req, res, next) => {
 exports.getComments = (req, res, next) => {
   const { article_id } = req.params;
 
-  Promise.all([checkArticleExists(article_id), checkCommentsExist(article_id), fetchComments(article_id)])
+  Promise.all([checkArticleExists(article_id), fetchComments(article_id)])
     .then((response) => {
-      res.status(200).send({ comments: response[2].rows });
+      res.status(200).send({ comments: response[1].rows });
     })
     .catch(next);
 };

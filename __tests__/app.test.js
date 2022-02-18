@@ -125,20 +125,20 @@ describe("NC News Server", () => {
             });
           });
       });
+      test("status(200), responds with an empty array when there are no comments for the particular article", () => {
+        return request(app)
+          .get("/api/articles/2/comments")
+          .expect(200)
+          .then((response) => {
+            expect(response.body.comments).toEqual([]);
+          });
+      });
       test("staus(404), responds with a 'Not Found' message when article_id doesn't exist", () => {
         return request(app)
           .get("/api/articles/100/comments")
           .expect(404)
           .then((response) => {
             expect(response.body.msg).toBe("ID 100 not found");
-          });
-      });
-      test("status(404), responds with a 'Not Found' message when there are no comments for the particular article", () => {
-        return request(app)
-          .get("/api/articles/2/comments")
-          .expect(404)
-          .then((response) => {
-            expect(response.body.msg).toBe("No comments found");
           });
       });
     });
