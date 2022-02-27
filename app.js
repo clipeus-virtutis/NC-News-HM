@@ -5,6 +5,7 @@ const {
   getArticles,
   getComments,
   postComment,
+  deleteComment,
 } = require("./controllers/article-controllers");
 const { handlesCustomErrors, handles500Errors, handlesPsqlErrors } = require("./controllers/error-controllers");
 const { getTopics } = require("./controllers/topics-controllers");
@@ -22,6 +23,8 @@ app.post("/api/articles/:article_id/comments", postComment);
 app.patch("/api/articles/:article_id", patchArticle);
 
 app.get("/api/users", getUsers);
+
+app.delete("/api/comments/:comment_id", deleteComment);
 
 app.all("/*", (req, res) => {
   res.status(404).send({ msg: "Path not found" });

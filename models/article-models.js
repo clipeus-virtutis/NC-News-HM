@@ -80,3 +80,7 @@ exports.updateArticle = (articleId, votes) => {
       });
   });
 };
+
+exports.removeComment = (commentId) => {
+  return db.query("DELETE FROM comments where comment_id = $1;", [commentId]);
+};

@@ -1,4 +1,4 @@
-const { checkArticleExists, checkCommentsExist } = require("../db/helpers/utils");
+const { checkArticleExists, checkCommentExists } = require("../db/helpers/utils");
 const {
   fetchArticle,
   updateArticle,
@@ -6,6 +6,7 @@ const {
   fetchCommentNumber,
   fetchComments,
   addComment,
+  removeComment,
 } = require("../models/article-models");
 
 exports.getArticles = (req, res, next) => {
@@ -51,13 +52,19 @@ exports.getComments = (req, res, next) => {
 
 exports.postComment = (req, res, next) => {
   const { article_id } = req.params;
-  // console.log(article_id, "arty ID");
-  // console.log(req.body, "BODY");
-
-  // Promise.all([checkArticleExists(article_id), addComment(article_id, req.body)])
   addComment(article_id, req.body)
     .then((response) => {
       res.status(201).send({ comment: response });
+    })
+    .catch(next);
+};
+
+exports.deleteComment = (req, res, next) => {
+  const commentId = req.params.comment_id;
+
+  Promise.all([checkCommentExists(commentId), removeComment(commentId)])
+    .then(() => {
+      res.status(204).end();
     })
     .catch(next);
 };
