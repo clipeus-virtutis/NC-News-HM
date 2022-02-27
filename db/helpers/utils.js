@@ -55,3 +55,16 @@ exports.checkCommentsExist = (articleId, next) => {
     })
     .catch(next);
 };
+
+exports.checkCommentExists = (commentID, next) => {
+  return db
+    .query(`SELECT * FROM comments WHERE comment_id = $1;`, [commentID])
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "Not found - comment doesn't exist" });
+      } else {
+        return rows;
+      }
+    })
+    .catch(next);
+};

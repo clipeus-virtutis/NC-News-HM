@@ -1,4 +1,4 @@
-const { checkArticleExists } = require("../db/helpers/utils");
+const { checkArticleExists, checkCommentExists } = require("../db/helpers/utils");
 
 exports.handlesCustomErrors = (err, req, res, next) => {
   if (err.status) {
