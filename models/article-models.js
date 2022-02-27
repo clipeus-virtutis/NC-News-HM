@@ -1,14 +1,25 @@
 const db = require("../db/connection");
 const { checkArticleExists, convertTimestampToDate } = require("../db/helpers/utils");
 
-exports.fetchArticles = () => {
-  return db
-    .query(
-      `SELECT articles.*, CAST(COUNT(comments.article_id) as INT) AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id GROUP BY articles.article_id ORDER BY created_at DESC;`
-    )
-    .then((results) => {
-      return results.rows;
-    });
+exports.fetchArticles = (sort_by = "created_at", order = "desc", topic) => {
+  const validSortBys = ["author", "title", "article_id", "topic", "created_at", "votes", "comment_count"];
+  const validOrderBys = ["desc", "asc"];
+  const queryValues = [];
+  let queryStr = `SELECT articles.*, CAST(COUNT(comments.article_id) as INT) AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id`;
+  if (topic) {
+    queryValues.push(topic);
+    queryStr += ` WHERE topic=$1`;
+  }
+  queryStr += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order}`;
+  if (!validSortBys.includes(sort_by)) {
+    return Promise.reject({ status: 400, msg: "Bad request - invalid query" });
+  }
+  if (!validOrderBys.includes(order)) {
+    return Promise.reject({ status: 400, msg: "Bad request - invalid query - order" });
+  }
+  return db.query(queryStr, queryValues).then((results) => {
+    return results.rows;
+  });
 };
 
 exports.fetchArticle = (articleId) => {
