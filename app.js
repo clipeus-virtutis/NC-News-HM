@@ -6,6 +6,7 @@ const {
   getComments,
   postComment,
   deleteComment,
+  getApi,
 } = require("./controllers/article-controllers");
 const { handlesCustomErrors, handles500Errors, handlesPsqlErrors } = require("./controllers/error-controllers");
 const { getTopics } = require("./controllers/topics-controllers");
@@ -14,13 +15,17 @@ const { getUsers } = require("./controllers/user-controllers");
 const app = express();
 app.use(express.json());
 
+app.get("/api", getApi);
+
 app.get("/api/topics", getTopics);
 
 app.get("/api/articles", getArticles);
+
 app.get("/api/articles/:article_id", getArticle);
+app.patch("/api/articles/:article_id", patchArticle);
+
 app.get("/api/articles/:article_id/comments", getComments);
 app.post("/api/articles/:article_id/comments", postComment);
-app.patch("/api/articles/:article_id", patchArticle);
 
 app.get("/api/users", getUsers);
 
