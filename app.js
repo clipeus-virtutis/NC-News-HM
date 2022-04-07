@@ -1,5 +1,6 @@
 const cors = require("cors");
 const express = require("express");
+const { getApi } = require("./controllers/api-controllers");
 const {
   getArticle,
   patchArticle,
@@ -7,7 +8,6 @@ const {
   getComments,
   postComment,
   deleteComment,
-  getApi,
 } = require("./controllers/article-controllers");
 const { handlesCustomErrors, handles500Errors, handlesPsqlErrors } = require("./controllers/error-controllers");
 const { getTopics } = require("./controllers/topics-controllers");
