@@ -204,7 +204,7 @@ describe("NC News Server", () => {
             expect(response.body.msg).toBe("Bad Request - invalid input");
           });
       });
-      test("staus(400), Bad Request message when article_id doesn't exist", () => {
+      test("status(400), Bad Request message when article_id doesn't exist", () => {
         return request(app)
           .post("/api/articles/100/comments")
           .expect(400)

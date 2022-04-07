@@ -1,6 +1,0 @@
-You are now connected to database "nc_news_test" as user "henrylinux".
- comment_id |                                       body                                        | article_id |    author     | votes |     created_at      
-------------+-----------------------------------------------------------------------------------+------------+---------------+-------+---------------------
-          1 | Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment! |          9 | butter_bridge |    16 | 2020-04-06 13:17:00
-(1 row)
-
